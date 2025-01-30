@@ -39,5 +39,5 @@ def calculate_rental_fees(start_date, end_date, daily_rate):
     start = datetime.strptime(start_date, "%Y-%m-%d")
     end = datetime.strptime(end_date, "%Y-%m-%d")
     rental_days = (end - start).days  # To get number of days as an integer
-    total_cost = rental_days * daily_rate
+    total_cost = rental_days * float(daily_rate)
     return total_cost

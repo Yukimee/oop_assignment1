@@ -26,7 +26,7 @@ def get_all_pending_bookings():
 
 
 def update_booking_status(booking_id, status):
-    """Updates the status of a booking (approved/rejected)."""
+    # Updates the status of a booking (approved/rejected).
     if status not in ["approved", "rejected"]:
         return "Invalid status! Use 'approved' or 'rejected'."
 

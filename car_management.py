@@ -11,11 +11,12 @@ def add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period):
                "VALUES (?, ?, ?, ?, ?, ?, ?)")
         values = (make, model, year, mileage, True, min_rent_period, max_rent_period)
 
-        if validate_car_details(year, mileage, min_rent_period, max_rent_period):
+        if validate_car_details(int(year), int(mileage), min_rent_period, max_rent_period):
             cursor.execute(sql, values)
             connection.commit()
-
             print("Car added successfully!")
+        else:
+            return False
     except Exception as e:
         return f"Error: {e}"
     finally:
