@@ -1,6 +1,32 @@
+import sqlite3
+
 class User:
+    def __init__(self, user_id, name, password, role):
+        self.user_id = user_id
+        self.name = name
+        self.password = password
+        self.role = role  # 'admin' or 'customer'
+
+    def get_role(self):
+        return self.role
+
+
+class Customer(User):
+    def __init__(self, user_id, name, password):
+        super().__init__(user_id, name, password, "customer")
+
+    def get_user_id(self):
+        return self.__user_id
+
+
+class Admin(User):
+    def __init__(self, user_id, name, password):
+        super().__init__(user_id, name, password, "admin")
+
+
+"""class User:
     def __init__(self, user_id, name, email, role):
-        self.__user_id = user_id  # Encapsulation
+        self.__user_id = user_id  # Encapsulation - to protect data
         self.__name = name
         self.__email = email
         self.__role = role  # 'customer' or 'admin'
@@ -28,26 +54,50 @@ class User:
         print(f"User: {self.__name}, Email: {self.__email}, Role: {self.__role}")
 
 
-users_db = {}
 
-
-def register_user(user_id, name, email, role, password):
-    if email in users_db:
-        return "User already exists!"
-    users_db[email] = {"user_id": user_id, "name": name, "role": role, "password": password}
-    return "User registered successfully!"
-
-
-def login_user(email, password):
-    if email in users_db and users_db[email]["password"] == password:
-        return f"Welcome, {users_db[email]['name']}!"
-    return "Invalid login credentials."
-
-
-# Example usage
-print(register_user(1, "Alice", "alice@example.com", "customer", "pass123"))
-print(login_user("alice@example.com", "pass123"))
 
 # Example usage
 user1 = User(1, "Tommy", "tom@gmail.com", "customer")
 user1.display_info()
+"""
+
+"""
+import sqlite3
+import hashlib
+
+
+class User:
+    def __init__(self, db_connection):
+        self.db_connection = db_connection
+
+    def register(self, username, password, email=None):
+        hashed_password = self._hash_password(password)
+        cursor = self.db_connection.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
+                (username, hashed_password, email)
+            )
+            self.db_connection.commit()
+            print("User registered successfully.")
+        except sqlite3.IntegrityError:
+            print("Error: Username already exists.")
+
+    def login(self, username, password):
+        cursor = self.db_connection.cursor()
+        cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+        result = cursor.fetchone()
+
+        if result and self._check_password(password, result[0]):
+            print(f"Welcome {username}!")
+            return True
+        else:
+            print("Invalid username or password.")
+            return False
+
+    def _hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
+
+    def _check_password(self, password, hashed_password):
+        return self._hash_password(password) == hashed_password
+"""
