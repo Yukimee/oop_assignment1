@@ -31,7 +31,7 @@ def prompt_user_to_register():
     email = input("Email: ")
     password = input("Password: ")
     role = input("Customer/Admin: ")
-    user = user_management.add_user_to_db(name, email, password, role)
+    user_management.add_user_to_db(name, email, password, role)
     return role
 
 
@@ -122,7 +122,7 @@ def prompt_admin_rental_booking(user_id):
 
     if prompt_selection == "add":
         valid = True
-        validity = prompt_add_car_details(valid)
+        validity = prompt_add_car_details()
         if validity:
             prompt_admin_function(user_id)
         else:
@@ -144,7 +144,7 @@ def prompt_admin_rental_booking(user_id):
         prompt_admin_rental_booking(user_id)  # Prompt the user again"""
 
 
-def prompt_add_car_details(valid):
+def prompt_add_car_details():
     # Prompt admin to add new cars
     print("Please enter car's detail:")
     make = input("Make: ")
@@ -179,6 +179,13 @@ def view_pending_bookings():
     print(booking_list)
 
 
+def update_booking_status():
+    booking_id = input("Please enter Booking ID:")
+    status = input("Please enter Booking Status: ")
+
+    rental_management.update_booking_status(booking_id, status)
+
+
 def prompt_customer_function(user_id):
 
     prompt_selection = input("Please choose an option to (View/Book) car: ").strip().lower()
@@ -208,13 +215,6 @@ def prompt_book_car(user_id):
     end_date = input("End Date (YYYY-MM-DD): ")
     daily_rate = input("Daily Rate: ")
     rental_booking.book_car(user_id, car_id, start_date, end_date, daily_rate, "pending")
-
-
-def update_booking_status():
-    booking_id = input("Please enter Booking ID:")
-    status = input("Please enter Booking Status: ")
-
-    rental_management.update_booking_status(booking_id, status)
 
 
 if __name__ == "__main__":
