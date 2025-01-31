@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9d8265f-5dbc-4cdf-b730-4434ce85a0ab" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/car_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/car_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/car_rental.db" beforeDir="false" afterPath="$PROJECT_DIR$/car_rental.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rental_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/rental_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_management.py" afterDir="false" />
-    </list>
+    <list default="true" id="b9d8265f-5dbc-4cdf-b730-4434ce85a0ab" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
