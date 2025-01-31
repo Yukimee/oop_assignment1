@@ -13,7 +13,13 @@ def get_all_pending_bookings():
         cursor.execute(sql)
         bookings = cursor.fetchall()
 
-        return [Booking(*row) for row in bookings]  # Convert each row to a Booking object
+        if bookings:
+            booking_list = [Booking(*row) for row in bookings]  # Convert each row to a Booking object
+
+            for booking in booking_list:
+                print(booking.get_booking_details())  # Display car details
+        else:
+            print("No bookings available.")
     finally:
         cursor.close()
         connection.close()
@@ -31,7 +37,8 @@ def update_booking_status(booking_id, status):
         sql = "UPDATE bookings SET status = ? WHERE booking_id = ?"
         cursor.execute(sql, (status, booking_id))
         connection.commit()
-        return f"Booking {booking_id} has been {status}."
+        print(f"Booking {booking_id} has been {status}.")
+        return
     except Exception as e:
         return f"Error updating booking: {e}"
     finally:
@@ -48,20 +55,28 @@ def book_car(user_id, car_id, start_date, end_date, daily_rate, status):
     end = datetime.strptime(end_date, "%Y-%m-%d")
 
     try:
-        sql = ("INSERT INTO bookings (user_id, car_id, start_date, end_date, total_cost, status) "
-               "VALUES (?, ?, ?, ?, ?, ?)")
-        booking = Booking(None, user_id, car_id, start_date, end_date, daily_rate, status)
-        values = (booking.get_customer_id(), booking.get_car_id(), booking.get_start_date(),
-                  booking.get_end_date(), booking.get_total_cost(), booking.get_status())
-
         if validate_date(start, end):
+
+            # Insert booking data
+            sql = ("INSERT INTO bookings (user_id, car_id, start_date, end_date, total_cost, status) VALUES (?, ?, ?, "
+                   "?, ?, ?)")
+
+            booking = Booking(None, user_id, car_id, start_date, end_date, daily_rate, status)
+            values = (booking.get_customer_id(), booking.get_car_id(), booking.get_start_date(),
+                      booking.get_end_date(), booking.get_total_cost(), booking.get_status())
             cursor.execute(sql, values)
+            connection.commit()
+
+            # Update car status
             cursor.execute("UPDATE cars SET available = 0 WHERE car_id = ?", (car_id,))
-            sql = "SELECT * FROM bookings WHERE car_id = ?"
-            cursor.execute(sql, (car_id,))
+            connection.commit()
+
+            # Update Booking Data - Booking ID (AutoIncremented)
+            sql_get_booking_data = "SELECT * FROM bookings WHERE car_id = ?"
+            cursor.execute(sql_get_booking_data, (car_id,))
+            connection.commit()
+
             booking_data = cursor.fetchone()
-            print(booking_data)
-            booking = Booking(*booking_data)
 
             if booking_data:
                 booking = Booking(*booking_data)

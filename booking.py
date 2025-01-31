@@ -37,18 +37,17 @@ class Booking:
     def get_total_cost(self):
         return self.__total_cost
 
-        # Setters
+    # Setters
     def set_status(self, status):
         if status in ["pending", "approved", "rejected"]:
-                self.__status = status
+            self.__status = status
 
     def calculate_price(self):
         rental_days = (self.__end_date - self.__start_date).days
         total_cost = float(rental_days * self.__daily_rate)
         return total_cost
 
-
     def get_booking_details(self):
         return (f"Booking ID: {self.__booking_id}, Customer ID: {self.__customer_id}, Car ID: {self.__car_id}, "
-                    f"Start Date: {self.__start_date.strftime('%Y-%m-%d')}, End Date: {self.__end_date.strftime('%Y-%m-%d')}, "
-                    f"Total Cost: ${self.__total_cost:.2f}, Status: {self.__status}")
+                f"Start Date: {self.__start_date.strftime('%Y-%m-%d')}, End Date: {self.__end_date.strftime('%Y-%m-%d')}, "
+                f"Total Cost: ${self.__total_cost:.2f}, Status: {self.__status}")

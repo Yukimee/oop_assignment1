@@ -3,7 +3,7 @@ from car import Car
 
 
 def add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period):
-    # Adds a new car to the database.
+    # Add a new car to the database.
     connection = connect_to_db()
     cursor = connection.cursor()
 
@@ -93,25 +93,6 @@ def view_available_cars():
     finally:
         cursor.close()
         connection.close()
-
-
-"""def get_all_cars_from_db():
-    # Fetches all cars from the database.
-    connection = connect_to_db()
-    cursor = connection.cursor()
-
-    try:
-        sql = "SELECT * FROM cars"
-        cursor.execute(sql)
-        cars = cursor.fetchall()
-
-        # car_list = [Car(*row) for row in cars]  # Convert each row to a Car object
-        # return car_list
-
-        return cars
-    finally:
-        cursor.close()
-        connection.close()"""
 
 
 def validate_car_details(year, mileage, min_rent_period, max_rent_period):

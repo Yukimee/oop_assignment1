@@ -102,7 +102,7 @@ def prompt_admin_rental_management(user_id):
         prompt_admin_rental_management(user_id)  # Prompt the user again"""
 
 
-def prompt_add_car_details():
+def prompt_add_car_details(valid):
     # Prompt admin to add new cars
     print("Please enter car's detail:")
     make = input("Make: ")
@@ -139,25 +139,23 @@ def prompt_admin_car_management(user_id):
           "\n(4) Back to Admin Function Menu")
     choice = input("Number: ")
 
-    prompt_selection = input("Please choose an option to (Add/Delete/Update/Back to main menu) car: ").strip().lower()
-
-    if prompt_selection == "1":
+    if choice == "1":
         valid = True
-        validity = prompt_add_car_details()
+        validity = prompt_add_car_details(valid)
         if validity:
             prompt_admin_function(user_id)
         else:
             prompt_admin_car_management(user_id)
         return
-    elif prompt_selection == "2":
+    elif choice == "2":
         prompt_delete_car_details()
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "3":
+    elif choice == "3":
         prompt_update_car_details()
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "4":
+    elif choice == "4":
         prompt_admin_function(user_id)
         return
     else:
@@ -166,15 +164,14 @@ def prompt_admin_car_management(user_id):
 
 
 def view_pending_bookings():
-    booking_list = rental_management.get_all_pending_bookings()
-    print(booking_list)
+    rental_management.get_all_pending_bookings()
 
 
 def update_booking_status():
     booking_id = input("Please enter Booking ID:")
     status = input("Please enter Booking Status: ")
 
-    rental_management.update_booking_status(booking_id, status)
+    rental_management.update_booking_status(booking_id, status.strip().lower())
 
 
 def prompt_customer_function(user):
@@ -208,7 +205,7 @@ def prompt_book_car(user_id):
     start_date = input("Start Date(YYYY-MM-DD): ")
     end_date = input("End Date (YYYY-MM-DD): ")
     daily_rate = input("Daily Rate: ")
-    booking_detail = rental_management.book_car(car_id, user_id, start_date, end_date, daily_rate, "pending")
+    booking_detail = rental_management.book_car(user_id, car_id, start_date, end_date, daily_rate, "pending")
     return booking_detail
 
 
