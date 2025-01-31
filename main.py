@@ -76,7 +76,6 @@ def prompt_admin_function(user_id):
         print("Invalid selection. Please enter 'Rental' or 'Booking'.")
         prompt_admin_function(user_id)  # Prompt the user again"""
 
-
     """prompt_selection = input("Please choose an option to (Add/Delete/Update) car: ").strip().lower()
 
     if prompt_selection == "add":
@@ -97,7 +96,6 @@ def prompt_admin_function(user_id):
 
 
 def prompt_admin_rental_management(user_id):
-
     prompt_selection = input("Please choose an option to (View/Update/Back to main menu) Bookings: ").strip().lower()
 
     if prompt_selection == "view":
@@ -116,8 +114,37 @@ def prompt_admin_rental_management(user_id):
         prompt_admin_rental_management(user_id)  # Prompt the user again"""
 
 
-def prompt_admin_rental_booking(user_id):
+def prompt_add_car_details():
+    # Prompt admin to add new cars
+    print("Please enter car's detail:")
+    make = input("Make: ")
+    model = input("Model: ")
+    year = input("Year: ")
+    mileage = input("Mileage: ")
+    min_rent_period = 1
+    max_rent_period = 7
+    valid = car_management.add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period)
+    return valid
 
+
+def prompt_delete_car_details():
+    # Prompt admin to delete car
+    print("Please enter car's ID:")
+    car_id = input("Car's ID: ")
+    print(car_management.delete_car_from_db(car_id))
+    return None
+
+
+def prompt_update_car_details():
+    # Prompt admin to add new cars
+    print("Please enter car's ID:")
+    car_id = input("Car's ID: ")
+    mileage = input("Mileage: ")
+    availability = input("Availability: ")
+    print(car_management.update_car_to_db(car_id, mileage, availability))
+
+
+def prompt_admin_rental_booking(user_id):
     prompt_selection = input("Please choose an option to (Add/Delete/Update/Back to main menu) car: ").strip().lower()
 
     if prompt_selection == "add":
@@ -144,36 +171,6 @@ def prompt_admin_rental_booking(user_id):
         prompt_admin_rental_booking(user_id)  # Prompt the user again"""
 
 
-def prompt_add_car_details():
-    # Prompt admin to add new cars
-    print("Please enter car's detail:")
-    make = input("Make: ")
-    model = input("Model: ")
-    year = input("Year: ")
-    mileage = input("Mileage: ")
-    min_rent_period = 1
-    max_rent_period = 7
-    valid = car_management.add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period)
-    return valid
-
-
-def prompt_delete_car_details():
-    # Prompt admin to delete car
-    print("Please enter car's ID:")
-    car_id = input("Car's ID: ")
-    print(car_management.delete_car(car_id))
-    return None
-
-
-def prompt_update_car_details():
-    # Prompt admin to add new cars
-    print("Please enter car's ID:")
-    car_id = input("Car's ID: ")
-    mileage = input("Mileage: ")
-    availability = input("Availability: ")
-    print(car_management.update_car(car_id, mileage, availability))
-
-
 def view_pending_bookings():
     booking_list = rental_management.get_all_pending_bookings()
     print(booking_list)
@@ -187,7 +184,6 @@ def update_booking_status():
 
 
 def prompt_customer_function(user_id):
-
     prompt_selection = input("Please choose an option to (View/Book) car: ").strip().lower()
 
     if prompt_selection == "view":

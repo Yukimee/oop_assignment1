@@ -1,4 +1,4 @@
-class Booking:
+"""class Booking:
     def __init__(self, booking_id, customer_id, car_id, start_date, end_date, daily_rate):
         self.booking_id = booking_id
         self.customer_id = customer_id
@@ -11,3 +11,4 @@ class Booking:
     def calculate_price(self):
         rental_days = (self.end_date - self.start_date).days
         return rental_days * self.daily_rate
+"""

@@ -1,6 +1,6 @@
 import unittest
 from user_management import register_user, get_user_from_db
-from car_management import add_car, update_car, delete_car, get_all_cars
+from car_management import add_car, update_car_to_db, delete_car_from_db, get_all_cars_from_db
 from rental_booking import book_car, view_available_cars
 
 
@@ -24,11 +24,11 @@ class TestCarManagement(unittest.TestCase):
         self.assertIsNone(result)
 
     def test_update_car(self):
-        result = update_car(1, "mileage", 55000)
+        result = update_car_to_db(1, "mileage", 55000)
         self.assertIsNone(result)
 
     def test_delete_car(self):
-        result = delete_car(1)
+        result = delete_car_from_db(1)
         self.assertIsNone(result)
 
 

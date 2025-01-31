@@ -24,7 +24,7 @@ def add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period):
         connection.close()
 
 
-def update_car(car_id, mileage=None, available=None):
+def update_car_to_db(car_id, mileage=None, available=None):
     # Updates car details such as mileage or availability.
     connection = connect_to_db()
     cursor = connection.cursor()
@@ -56,7 +56,7 @@ def update_car(car_id, mileage=None, available=None):
         connection.close()
 
 
-def delete_car(car_id):
+def delete_car_from_db(car_id):
     # Deletes a car from the database.
     connection = connect_to_db()
     cursor = connection.cursor()
@@ -73,7 +73,7 @@ def delete_car(car_id):
         connection.close()
 
 
-def get_all_cars():
+def get_all_cars_from_db():
     # Fetches all cars from the database.
     connection = connect_to_db()
     cursor = connection.cursor()
