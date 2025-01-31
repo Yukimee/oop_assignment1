@@ -1,6 +1,6 @@
 import unittest
 from user_management import register_user, get_user_from_db
-from car_management import add_car, update_car_to_db, delete_car_from_db, get_all_cars_from_db
+from car_management import add_car, update_car_to_db, delete_car_from_db
 from rental_booking import book_car, view_available_cars
 
 

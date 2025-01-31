@@ -1,11 +1,10 @@
-import car_management, user_management
-from user_factory import UserFactory
-import rental_booking
+import car_management
 import rental_management
+import user_management
 
 
 def prompt_user_to_login():
-    # Prompt user to login
+    # Prompt user to login.
     print("Welcome to Car Rental Services! Please enter email and password to login.")
     email = input("Email: ")
     password = input("Password: ")
@@ -13,104 +12,93 @@ def prompt_user_to_login():
     user = user_management.get_user_from_db(email, password)
 
     if user:
-        user_id, name, password, role = user
-        UserFactory.create_user(user_id, name, password, role)
-        print(f"Login successful!")
-        return user_id, role
+        print(f"Login successful! Welcome, {user.get_name()} ({user.get_role()})")
+        return user
     else:
-        print("Invalid username or password. If you haven't registered yet, "
-              "please take a moment to sign up and join us. Registration is quick and easy, "
-              "and it gives you access to all the great features we offer. Don’t miss out on the benefits!")
+        print("Invalid email or password. Please register if you don't have an account.")
         return None
 
 
 def prompt_user_to_register():
-    # Prompt user to register
-    print("Welcome to Car Rental Services! If you haven't registered yet, please take a moment to sign up and join us.")
+    # Prompt user to register.
+    print("Welcome to Car Rental Services! Please enter your details to register.")
     name = input("Name: ")
     email = input("Email: ")
     password = input("Password: ")
-    role = input("Customer/Admin: ")
-    user_management.add_user_to_db(name, email, password, role)
-    return role
+    role = input("Role (Customer/Admin): ").strip().lower()
+
+    if role not in ["customer", "admin"]:
+        print("Invalid role. Please enter 'Customer' or 'Admin'.")
+        return None
+
+    success = user_management.add_user_to_db(name, email, password, role)
+    if success:
+        return prompt_user_to_login()
+    return None
 
 
-def validate_role(user_id, role):
-    if role == "admin":
-        prompt_admin_function(user_id)
-    elif role == "customer":
-        prompt_customer_function(user_id)
+def validate_role(user):
+    # Redirect user based on their role.
+    if user.get_role() == "admin":
+        prompt_admin_function(user)
+    elif user.get_role() == "customer":
+        prompt_customer_function(user)
 
 
 def main():
     while True:
-        prompt_selection = input("Please choose an option (Login/Register): ").strip().lower()
+        print("Please choose an option: \n(1) Login \n(2) Register\n")
+        choice = input("Number: ")
 
-        if prompt_selection == "login":
-            user_id, role = prompt_user_to_login()
-            validate_role(user_id, role)
-
-        elif prompt_selection == "register":
-            prompt_user_to_register()
-            user_id, role = prompt_user_to_login()
-            validate_role(user_id, role)
-
+        if choice == "1":
+            user = prompt_user_to_login()
+            if user:
+                validate_role(user)
+        elif choice == "2":
+            user = prompt_user_to_register()
+            if user:
+                validate_role(user)
         else:
-            print("Invalid selection. Please enter 'Login' or 'Register'.")
-            main()  # Prompt the user again
+            print("Invalid selection. Please enter '1' or '2'.")
 
 
 def prompt_admin_function(user_id):
     # Prompt admin to select a function
-    prompt_selection = input("Please choose an option for Rental (Management/Booking): ").strip().lower()
+    print("Please select a function: \n(1) Rental Management \n(2) Car Management\n")
+    choice = input("Number: ")
 
-    if prompt_selection == "management":
+    if choice == "1":
         prompt_admin_rental_management(user_id)
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "booking":
-        prompt_admin_rental_booking(user_id)
+    elif choice == "2":
+        prompt_admin_car_management(user_id)
         prompt_admin_function(user_id)
         return
     else:
-        print("Invalid selection. Please enter 'Rental' or 'Booking'.")
-        prompt_admin_function(user_id)  # Prompt the user again"""
-
-    """prompt_selection = input("Please choose an option to (Add/Delete/Update) car: ").strip().lower()
-
-    if prompt_selection == "add":
-        prompt_add_car_details()
-        prompt_admin_function(user_id)
-
-    elif prompt_selection == "delete":
-        prompt_delete_car_details()
-        prompt_admin_function(user_id)
-
-    elif prompt_selection == "update":
-        prompt_update_car_details()
-        prompt_admin_function(user_id)
-
-    else:
-        print("Invalid selection. Please enter 'Add' or 'Delete' or 'Update'.")
+        print("Invalid selection. Please enter '1' or '2'.")
         prompt_admin_function(user_id)  # Prompt the user again"""
 
 
 def prompt_admin_rental_management(user_id):
-    prompt_selection = input("Please choose an option to (View/Update/Back to main menu) Bookings: ").strip().lower()
+    # Prompt admin to select a function from rental management
+    print("Please select a function: \n(1) View Pending Booking \n(2) Update Booking Status "
+          "\n(3) Back to Admin Function Menu")
+    choice = input("Number: ")
 
-    if prompt_selection == "view":
+    if choice == "1":
         view_pending_bookings()
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "update":
+    elif choice == "2":
         update_booking_status()
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "back to main menu":
+    elif choice == "3":
         prompt_admin_function(user_id)
         return
     else:
-        print("Invalid selection. Please enter 'Add' or 'Delete' or 'Update'.")
+        print("Invalid selection. Please enter '1' or '2' or '3'.")
         prompt_admin_rental_management(user_id)  # Prompt the user again"""
 
 
@@ -123,6 +111,7 @@ def prompt_add_car_details():
     mileage = input("Mileage: ")
     min_rent_period = 1
     max_rent_period = 7
+
     valid = car_management.add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period)
     return valid
 
@@ -144,31 +133,36 @@ def prompt_update_car_details():
     print(car_management.update_car_to_db(car_id, mileage, availability))
 
 
-def prompt_admin_rental_booking(user_id):
+def prompt_admin_car_management(user_id):
+    # Prompt admin to select a function from car management
+    print("Please select a function: \n(1) Add Car \n(2) Delete A Car \n(3) Update Car Mileage "
+          "\n(4) Back to Admin Function Menu")
+    choice = input("Number: ")
+
     prompt_selection = input("Please choose an option to (Add/Delete/Update/Back to main menu) car: ").strip().lower()
 
-    if prompt_selection == "add":
+    if prompt_selection == "1":
         valid = True
         validity = prompt_add_car_details()
         if validity:
             prompt_admin_function(user_id)
         else:
-            prompt_admin_rental_booking(user_id)
+            prompt_admin_car_management(user_id)
         return
-    elif prompt_selection == "delete":
+    elif prompt_selection == "2":
         prompt_delete_car_details()
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "update":
+    elif prompt_selection == "3":
         prompt_update_car_details()
         prompt_admin_function(user_id)
         return
-    elif prompt_selection == "back to main menu":
+    elif prompt_selection == "4":
         prompt_admin_function(user_id)
         return
     else:
-        print("Invalid selection. Please enter 'Add' or 'Delete' or 'Update'.")
-        prompt_admin_rental_booking(user_id)  # Prompt the user again"""
+        print("Invalid selection. Please enter '1' or '2' or '3' or '4'.")
+        prompt_admin_car_management(user_id)  # Prompt the user again"""
 
 
 def view_pending_bookings():
@@ -183,24 +177,28 @@ def update_booking_status():
     rental_management.update_booking_status(booking_id, status)
 
 
-def prompt_customer_function(user_id):
-    prompt_selection = input("Please choose an option to (View/Book) car: ").strip().lower()
+def prompt_customer_function(user):
+    print("Please choose an option: \n(1) View Available Cars \n(2) Book Car\n")
+    choice = input("Number: ")
 
-    if prompt_selection == "view":
-        view_available_car()
-        prompt_customer_function(user_id)
+    if choice == "1":
+        car_list = view_available_car()
 
-    elif prompt_selection == "book":
-        prompt_book_car(user_id)
-        prompt_customer_function(user_id)
+        if car_list:
+            prompt_customer_function(user)
+
+    elif choice == "2":
+        prompt_book_car(user.get_user_id())
+        prompt_customer_function(user)
 
     else:
-        print("Invalid selection. Please enter 'View' or 'Book'.")
-        prompt_customer_function(user_id)  # Prompt the user again
+        print("Invalid selection. Please enter '1' or '2'.")
+        prompt_customer_function(user)  # Prompt the user again
 
 
 def view_available_car():
-    rental_booking.view_available_cars()
+    car_list = car_management.view_available_cars()
+    return car_list
 
 
 def prompt_book_car(user_id):
@@ -210,7 +208,8 @@ def prompt_book_car(user_id):
     start_date = input("Start Date(YYYY-MM-DD): ")
     end_date = input("End Date (YYYY-MM-DD): ")
     daily_rate = input("Daily Rate: ")
-    rental_booking.book_car(user_id, car_id, start_date, end_date, daily_rate, "pending")
+    booking_detail = rental_management.book_car(car_id, user_id, start_date, end_date, daily_rate, "pending")
+    return booking_detail
 
 
 if __name__ == "__main__":

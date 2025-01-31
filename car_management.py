@@ -1,4 +1,5 @@
 from db_config import connect_to_db
+from car import Car
 
 
 def add_car_to_db(make, model, year, mileage, min_rent_period, max_rent_period):
@@ -73,7 +74,28 @@ def delete_car_from_db(car_id):
         connection.close()
 
 
-def get_all_cars_from_db():
+def view_available_cars():
+    connection = connect_to_db()
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("SELECT * FROM cars WHERE available = 1")
+        cars = cursor.fetchall()
+
+        if cars:
+            car_list = [Car(*row) for row in cars]  # Convert each row to a Car object
+
+            for car in cars:
+                print(car)  # Display car details
+            return car_list
+        else:
+            print("No cars available.")
+    finally:
+        cursor.close()
+        connection.close()
+
+
+"""def get_all_cars_from_db():
     # Fetches all cars from the database.
     connection = connect_to_db()
     cursor = connection.cursor()
@@ -82,10 +104,14 @@ def get_all_cars_from_db():
         sql = "SELECT * FROM cars"
         cursor.execute(sql)
         cars = cursor.fetchall()
+
+        # car_list = [Car(*row) for row in cars]  # Convert each row to a Car object
+        # return car_list
+
         return cars
     finally:
         cursor.close()
-        connection.close()
+        connection.close()"""
 
 
 def validate_car_details(year, mileage, min_rent_period, max_rent_period):

@@ -1,13 +1,12 @@
-from user import Admin
-from user import Customer
+from user import Admin, Customer
 
 
 class UserFactory:
     @staticmethod
-    def create_user(user_id, name, password, role):
-        if role == "admin":
-            return Admin(user_id, name, password)
-        elif role == "customer":
-            return Customer(user_id, name, password)
+    def create_user(user_id, name, email, password, role):
+        if role.lower() == "admin":
+            return Admin(user_id, name, email, password)
+        elif role.lower() == "customer":
+            return Customer(user_id, name, email, password)
         else:
             raise ValueError("Invalid user role")
