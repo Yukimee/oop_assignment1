@@ -1,6 +1,7 @@
 import car_management
 import rental_management
 import user_management
+from db_setup import create_tables
 
 
 def prompt_user_to_login():
@@ -46,6 +47,8 @@ def validate_role(user):
 
 
 def main():
+
+    create_tables()
     while True:
         print("Please choose an option: \n(1) Login \n(2) Register\n")
         choice = input("Number: ")
